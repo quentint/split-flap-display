@@ -1,0 +1,24 @@
+:root {
+  --fontsize: 3rem;
+  --negative-fontsize: calc(var(--fontsize) * -1);
+  --background-body: hsl(0, 0%, 5%);
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+}
+
+html,
+body,
+#app {
+  width: fit-content;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+#app {
+  width: fit-content;
+}
