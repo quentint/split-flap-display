@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import characters from './characters';
 
 interface Props {
@@ -17,11 +17,11 @@ const currentChar = ref(characters[0]);
 const nextChar = ref(characters[props.char === characters[0] ? 0 : 1]);
 const upperFlapAnimState = ref(UPPER_START);
 const bottomFlapAnimState = ref(BOTTOM_START);
-
-const findResult = characters.findIndex(el => el === props.char);
-const targetIndex = findResult === -1 ? 0 : findResult;
+const animationAbort = ref<AbortController | null>(null);
 
 const delay = props.duration / characters.length;
+
+// noinspection JSUnusedGlobalSymbols
 const animDuration = `${delay / 2}ms`;
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -39,14 +39,38 @@ const resetAnimation = () => {
   bottomFlapAnimState.value = BOTTOM_START;
 };
 
-onMounted(async () => {
+const runAnimationSequence = async (targetIndex: number) => {
+  // Abort any running animation
+  if (animationAbort.value) {
+    animationAbort.value.abort();
+  }
+  const abortController = new AbortController();
+  animationAbort.value = abortController;
+
+  nextChar.value = characters[targetIndex === 0 ? 0 : 1];
   for (let i = 1; i < targetIndex; i++) {
+    if (abortController.signal.aborted) return;
     await animate();
+    if (abortController.signal.aborted) return;
     currentChar.value = characters[i];
     resetAnimation();
     nextChar.value = characters[i + 1] ?? characters[i];
   }
   currentChar.value = characters[targetIndex];
+  resetAnimation();
+};
+
+const getTargetIndex = (char: string) => {
+  const findResult = characters.findIndex(el => el === char);
+  return findResult === -1 ? 0 : findResult;
+};
+
+onMounted(async () => {
+  await runAnimationSequence(getTargetIndex(props.char));
+});
+
+watch(() => props.char, async (newChar) => {
+  await runAnimationSequence(getTargetIndex(newChar));
 });
 </script>
 
