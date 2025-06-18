@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import SplitFlap from './components/SplitFlap.vue';
-const string = 'Hello, World!';
+import {ref} from 'vue'
+const s = ref('Hello, World!');
+
+const reverse = () => {
+  s.value = s.value.split('').reverse().join('');
+};
 </script>
 
 <template>
   <pre>
-    <SplitFlap v-for="c in string.toUpperCase()" :char="c" :duration="5000" />
+    <SplitFlap v-for="c in s.toUpperCase()" :char="c" :duration="3000" />
+    <button @click="reverse">Reverse</button>
+    <span>{{ s }}</span>
   </pre>
 </template>
 
