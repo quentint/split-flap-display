@@ -17,7 +17,7 @@ const currentChar = ref(characters[0]);
 const nextChar = ref(characters[props.char === characters[0] ? 0 : 1]);
 const upperFlapAnimState = ref(UPPER_START);
 const bottomFlapAnimState = ref(BOTTOM_START);
-const animationAbort = ref<AbortController | null>(null);
+const animationId = ref(0);
 
 const delay = props.duration / characters.length;
 
@@ -40,18 +40,14 @@ const resetAnimation = () => {
 };
 
 const runAnimationSequence = async (targetIndex: number) => {
-  // Abort any running animation
-  if (animationAbort.value) {
-    animationAbort.value.abort();
-  }
-  const abortController = new AbortController();
-  animationAbort.value = abortController;
+  animationId.value++;
+  const myId = animationId.value;
 
   nextChar.value = characters[targetIndex === 0 ? 0 : 1];
   for (let i = 1; i < targetIndex; i++) {
-    if (abortController.signal.aborted) return;
+    if (myId !== animationId.value) return;
     await animate();
-    if (abortController.signal.aborted) return;
+    if (myId !== animationId.value) return;
     currentChar.value = characters[i];
     resetAnimation();
     nextChar.value = characters[i + 1] ?? characters[i];
