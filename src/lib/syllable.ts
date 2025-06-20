@@ -1,6 +1,7 @@
 const simpleConsonants = 'bdfjklmnprtvz'.toUpperCase().split('')
-const hardConsonants = 'cghqsvwx'.toUpperCase().split('')
-const consonants = simpleConsonants.concat(hardConsonants)
+const hardConsonants = 'cghswx'.toUpperCase().split('')
+const neverConsonants = 'q'.toUpperCase().split('')
+const consonants = simpleConsonants.concat(hardConsonants, neverConsonants)
 const vowels = 'aeiou'.toUpperCase().split('')
 
 export const characters = consonants

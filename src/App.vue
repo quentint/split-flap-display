@@ -5,9 +5,12 @@ import {makeSyllablePack} from './lib/syllable.ts'
 import flapAudio from '/src/assets/flap.mp3'
 import ConfettiExplosion from 'vue-confetti-explosion'
 
-const s = ref('')
-
+const s = ref(' ')
 const audio = useTemplateRef<HTMLAudioElement>('audio')
+const confetti = ref(false)
+const settingsVisible = ref(false)
+const hardSyllables = ref(false)
+const numSyllables = ref(1)
 
 const onFlapStart = () => {
   if (!audio.value) {
@@ -18,14 +21,11 @@ const onFlapStart = () => {
 }
 
 const showNewSyllable = () => {
-  s.value = makeSyllablePack(2).toUpperCase()
+  s.value = makeSyllablePack(numSyllables.value, hardSyllables.value).toUpperCase()
 }
 
-const confetti = ref(false)
 
-const onSuccess = async (e: Event) => {
-  e.stopImmediatePropagation()
-
+const onSuccess = async () => {
   confetti.value = false
   await nextTick()
   confetti.value = true
@@ -37,12 +37,18 @@ const onSuccess = async (e: Event) => {
   <div class="absolute inset-0 overflow-clip">
     <ConfettiExplosion v-if="confetti" class="absolute left-1/2 top-1/2"/>
   </div>
-  <div class="absolute inset-0 flex items-center justify-center" @click="showNewSyllable">
+  <div class="absolute inset-0 flex items-center justify-center">
     <SplitFlapLine v-if="s.length"
                    :flap-ms="150"
                    :text="s.toUpperCase()"
+                   @click="showNewSyllable"
                    @flap-start="onFlapStart"/>
+    <button class="absolute bottom-0 left-0 size-[10dvw]" @click="settingsVisible = !settingsVisible"></button>
     <button class="absolute bottom-0 right-0 size-[10dvw]" @click="onSuccess"></button>
+  </div>
+  <div v-if="settingsVisible" class="absolute left-0 right-0 top-0 flex flex-wrap gap-4 p-4 justify-center items-center">
+    <label><input type="checkbox" v-model="hardSyllables"> Syllabes difficiles</label>
+    <label>Nombre de syllables <input type="number" v-model="numSyllables" class="w-12 border"></label>
   </div>
 </template>
 
