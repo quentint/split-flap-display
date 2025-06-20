@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, defineEmits } from 'vue';
-import characters from './characters';
+import {characters} from '../lib/syllable.ts'
 
 interface Props {
   char: string;
