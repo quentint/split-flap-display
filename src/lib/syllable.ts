@@ -5,7 +5,7 @@ const consonants = simpleConsonants.concat(hardConsonants, neverConsonants)
 const vowels = 'aeiou'.toUpperCase().split('')
 
 export const characters = consonants
-.concat(vowels, ' ', 'y')
+.concat(vowels, ' ', 'Y')
 .sort((a: string, b: string) => {
   return a.localeCompare(b)
 })
