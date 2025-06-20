@@ -4,7 +4,7 @@ import characters from './characters';
 
 interface Props {
   char: string;
-  duration: number;
+  flapMs?: number;
 }
 
 const UPPER_START = 'upperFlap__start';
@@ -13,13 +13,14 @@ const BOTTOM_START = 'bottomFlap__start';
 const BOTTOM_END = 'bottomFlap__end';
 
 const props = defineProps<Props>();
+const flapMs = props.flapMs ?? 100;
 const currentChar = ref(characters[0]);
 const nextChar = ref(characters[props.char === characters[0] ? 0 : 1]);
 const upperFlapAnimState = ref(UPPER_START);
 const bottomFlapAnimState = ref(BOTTOM_START);
 const animationId = ref(0);
 
-const delay = props.duration / characters.length;
+const delay = flapMs;
 
 // noinspection JSUnusedGlobalSymbols
 const animDuration = `${delay / 2}ms`;

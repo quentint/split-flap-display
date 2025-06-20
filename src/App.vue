@@ -10,7 +10,7 @@ const reverse = () => {
 
 <template>
   <pre>
-    <SplitFlap v-for="c in s.toUpperCase()" :char="c" :duration="3000" />
+    <SplitFlap v-for="c in s.toUpperCase()" :char="c" />
     <button @click="reverse">Reverse</button>
     <span>{{ s }}</span>
   </pre>
