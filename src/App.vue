@@ -3,21 +3,23 @@ import SplitFlapLine from './components/SplitFlapLine.vue'
 import {nextTick, ref, useTemplateRef} from 'vue'
 import {makeSyllablePack} from './lib/syllable.ts'
 import flapAudio from '/src/assets/flap.mp3'
+import popAudio from '/src/assets/pop.mp3'
 import ConfettiExplosion from 'vue-confetti-explosion'
 
 const s = ref(' ')
-const audio = useTemplateRef<HTMLAudioElement>('audio')
+const flapAudioElement = useTemplateRef<HTMLAudioElement>('flap')
+const popAudioElement = useTemplateRef<HTMLAudioElement>('pop')
 const confetti = ref(false)
 const settingsVisible = ref(false)
 const hardSyllables = ref(false)
 const numSyllables = ref(1)
 
 const onFlapStart = () => {
-  if (!audio.value) {
+  if (!flapAudioElement.value) {
     return
   }
-  audio.value.currentTime = 0
-  audio.value.play()
+  flapAudioElement.value.currentTime = 0
+  flapAudioElement.value.play()
 }
 
 const showNewSyllable = () => {
@@ -26,6 +28,11 @@ const showNewSyllable = () => {
 
 
 const onSuccess = async () => {
+  if (popAudioElement.value) {
+    popAudioElement.value.currentTime = 0
+    popAudioElement.value.play()
+  }
+
   confetti.value = false
   await nextTick()
   confetti.value = true
@@ -33,7 +40,8 @@ const onSuccess = async () => {
 </script>
 
 <template>
-  <audio ref="audio" :src="flapAudio"></audio>
+  <audio ref="flap" :src="flapAudio"></audio>
+  <audio ref="pop" :src="popAudio"></audio>
   <div class="absolute inset-0 overflow-clip">
     <ConfettiExplosion v-if="confetti" class="absolute left-1/2 top-1/2"/>
   </div>
