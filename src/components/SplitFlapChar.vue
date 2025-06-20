@@ -43,34 +43,57 @@ const resetAnimation = () => {
   bottomFlapAnimState.value = BOTTOM_START
 }
 
+const performStep = async (
+  myId: number,
+  charIndex: number,
+  nextIndex: number
+) => {
+  if (myId !== animationId.value) {
+    return false
+  }
+
+  await animate()
+
+  if (myId !== animationId.value) {
+    return false
+  }
+
+  currentChar.value = characters[charIndex]
+  resetAnimation()
+  nextChar.value = characters[nextIndex] ?? characters[charIndex]
+
+  return true
+}
+
 const runAnimationSequence = async (targetIndex: number) => {
   animationId.value++
   const myId = animationId.value
 
-  nextChar.value = characters[targetIndex === 0 ? 0 : 1]
+  // Find the current character's index
+  const currentIndex = characters.findIndex(el => el === currentChar.value)
+  let fromIndex = currentIndex === -1 ? 0 : currentIndex
 
-  for (let i = 1; i < targetIndex; i++) {
-    if (myId !== animationId.value) return
-    await animate()
-    if (myId !== animationId.value) return
-    currentChar.value = characters[i]
-    resetAnimation()
-    nextChar.value = characters[i + 1] ?? characters[i]
+  // If already at target, just update nextChar and return
+  if (fromIndex === targetIndex) {
+    nextChar.value = characters[targetIndex]
+    return
+  }
+
+  // Determine direction and number of steps (always forward, wrap around)
+  let steps = (targetIndex - fromIndex + characters.length) % characters.length
+  for (let i = 1; i <= steps; i++) {
+    const charIdx = (fromIndex + i) % characters.length
+    const nextIdx = (fromIndex + i + 1) % characters.length
+    const continued = await performStep(myId, charIdx, nextIdx)
+    if (!continued) {
+      return
+    }
   }
 
   // Play the final animation before showing the target character
-  if (targetIndex > 0) {
-    if (myId !== animationId.value) return
-    await animate()
-    if (myId !== animationId.value) return
-    currentChar.value = characters[targetIndex]
-    resetAnimation()
-    nextChar.value = characters[targetIndex]
-  } else {
-    currentChar.value = characters[0]
-    resetAnimation()
-    nextChar.value = characters[0]
-  }
+  currentChar.value = characters[targetIndex]
+  resetAnimation()
+  nextChar.value = characters[targetIndex]
 }
 
 const getTargetIndex = (char: string) => {
