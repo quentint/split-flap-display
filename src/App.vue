@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SplitFlap from './components/SplitFlap.vue';
+import SplitFlapLine from './components/SplitFlapLine.vue';
 import {ref} from 'vue'
-const s = ref('Hello, World!');
+const s = ref('Hello World!');
 
 const reverse = () => {
   s.value = s.value.split('').reverse().join('');
@@ -9,19 +9,19 @@ const reverse = () => {
 </script>
 
 <template>
-  <pre>
-    <SplitFlap v-for="c in s.toUpperCase()" :char="c" />
+  <div class="app-wrapper">
+    <SplitFlapLine :text="s.toUpperCase()" :flap-ms="250" />
+    <SplitFlapLine text="SALUT" :flap-ms="250" />
     <button @click="reverse">Reverse</button>
     <span>{{ s }}</span>
-  </pre>
+  </div>
 </template>
 
 <style scoped lang="css">
-pre {
+.app-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 1.5rem;
   height: 100%;
   width: fit-content;

@@ -1,6 +1,4 @@
 :root {
-  --fontsize: 3rem;
-  --negative-fontsize: calc(var(--fontsize) * -1);
   --background-body: hsl(0, 0%, 5%);
   box-sizing: border-box;
 }

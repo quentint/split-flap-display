@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, defineEmits } from 'vue';
 import characters from './characters';
 
 interface Props {
@@ -19,6 +19,7 @@ const nextChar = ref(characters[props.char === characters[0] ? 0 : 1]);
 const upperFlapAnimState = ref(UPPER_START);
 const bottomFlapAnimState = ref(BOTTOM_START);
 const animationId = ref(0);
+const emit = defineEmits(['flapStart', 'flapEnd']);
 
 const delay = flapMs;
 
@@ -28,11 +29,13 @@ const animDuration = `${delay / 2}ms`;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const animate = async () => {
+  emit('flapStart');
   await wait(delay / 2);
   upperFlapAnimState.value = UPPER_END;
   await wait(delay / 2);
   bottomFlapAnimState.value = BOTTOM_END;
   await wait(delay / 2);
+  emit('flapEnd');
 };
 
 const resetAnimation = () => {
@@ -107,6 +110,12 @@ watch(() => props.char, (newChar) => {
 </template>
 
 <style scoped lang="css">
+.wrapper {
+  --fontsize: 5rem;
+  font-family: monospace;
+  white-space: pre;
+}
+
 span {
   padding: 1rem;
   font-size: var(--fontsize);
