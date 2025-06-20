@@ -44,6 +44,7 @@ const runAnimationSequence = async (targetIndex: number) => {
   const myId = animationId.value;
 
   nextChar.value = characters[targetIndex === 0 ? 0 : 1];
+
   for (let i = 1; i < targetIndex; i++) {
     if (myId !== animationId.value) return;
     await animate();
@@ -52,8 +53,20 @@ const runAnimationSequence = async (targetIndex: number) => {
     resetAnimation();
     nextChar.value = characters[i + 1] ?? characters[i];
   }
-  currentChar.value = characters[targetIndex];
-  resetAnimation();
+
+  // Play the final animation before showing the target character
+  if (targetIndex > 0) {
+    if (myId !== animationId.value) return;
+    await animate();
+    if (myId !== animationId.value) return;
+    currentChar.value = characters[targetIndex];
+    resetAnimation();
+    nextChar.value = characters[targetIndex];
+  } else {
+    currentChar.value = characters[0];
+    resetAnimation();
+    nextChar.value = characters[0];
+  }
 };
 
 const getTargetIndex = (char: string) => {
@@ -61,12 +74,12 @@ const getTargetIndex = (char: string) => {
   return findResult === -1 ? 0 : findResult;
 };
 
-onMounted(async () => {
-  await runAnimationSequence(getTargetIndex(props.char));
+onMounted(() => {
+  runAnimationSequence(getTargetIndex(props.char));
 });
 
-watch(() => props.char, async (newChar) => {
-  await runAnimationSequence(getTargetIndex(newChar));
+watch(() => props.char, (newChar) => {
+  runAnimationSequence(getTargetIndex(newChar));
 });
 </script>
 
