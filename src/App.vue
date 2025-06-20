@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import SplitFlapLine from './components/SplitFlapLine.vue';
 import {ref, useTemplateRef} from 'vue'
-import {makeSimpleSyllable} from './lib/syllable.ts'
+import {makeSyllablePack} from './lib/syllable.ts'
 import flapAudio from '/src/assets/flap.mp3';
 
-const s = ref('  ');
+const s = ref('');
 
 const audio = useTemplateRef<HTMLAudioElement>('audio');
 
@@ -17,13 +17,13 @@ const onFlapStart = () => {
 };
 
 const showNewSyllable = () => {
-  s.value = makeSimpleSyllable().toUpperCase();
+  s.value = makeSyllablePack(2).toUpperCase();
 };
 </script>
 
 <template>
   <div class="app-wrapper" @click="showNewSyllable">
-    <SplitFlapLine :flap-ms="150"
+    <SplitFlapLine v-if="s.length" :flap-ms="150"
                    :text="s.toUpperCase()"
                    @flap-start="onFlapStart" />
   </div>
