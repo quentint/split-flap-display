@@ -1,22 +1,32 @@
 <script setup lang="ts">
 import SplitFlapLine from './components/SplitFlapLine.vue';
-import {ref} from 'vue'
+import {ref, useTemplateRef} from 'vue'
 const s = ref('Hello World!');
 
 const reverse = () => {
   s.value = s.value.split('').reverse().join('');
 };
+
+const audio = useTemplateRef<HTMLAudioElement>('audio');
+
+const onFlapStart = () => {
+  if (!audio.value) {
+    return;
+  }
+  audio.value.currentTime = 0;
+  audio.value.play();
+};
 </script>
 
 <template>
   <div class="app-wrapper">
-    <SplitFlapLine :flap-ms="1000"
+    <SplitFlapLine :flap-ms="150"
                    :text="s.toUpperCase()"
-                   @flap-start="() => console.log('start')"
-                   @flap-end="() => console.log('end')"/>
+                   @flap-start="onFlapStart" />
     <button @click="reverse">Reverse</button>
     <span>{{ s }}</span>
   </div>
+  <audio ref="audio" src="/flap.mp3"></audio>
 </template>
 
 <style scoped lang="css">
