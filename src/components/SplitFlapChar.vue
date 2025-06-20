@@ -88,21 +88,20 @@ watch(() => props.char, (newChar) => {
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper text-8xl font-mono whitespace-pre cursor-default">
     <div class="upper">
-      <span class="next">
+      <span class="next bg-stone-800 px-6 py-4">
         {{ nextChar }}
       </span>
-      <span class="current" :class="upperFlapAnimState">
+      <span class="current bg-stone-800 px-6 py-4" :class="upperFlapAnimState">
         {{ currentChar }}
       </span>
     </div>
-
     <div class="bottom">
-      <span class="next" :class="bottomFlapAnimState">
+      <span class="next bg-stone-800 px-6 py-4" :class="bottomFlapAnimState">
         {{ nextChar }}
       </span>
-      <span class="current">
+      <span class="current bg-stone-800 px-6 py-4">
         {{ currentChar }}
       </span>
     </div>
@@ -110,19 +109,6 @@ watch(() => props.char, (newChar) => {
 </template>
 
 <style scoped lang="css">
-.wrapper {
-  --fontsize: 5rem;
-  font-family: monospace;
-  white-space: pre;
-  cursor: default;
-}
-
-span {
-  padding: 1rem;
-  font-size: var(--fontsize);
-  background-color: hsl(0, 0%, 15%);
-}
-
 .wrapper {
   position: relative;
   display: flex;
@@ -193,20 +179,4 @@ span {
 .bottom * {
   clip-path: inset(50% 0 0 0);
 }
-
-/* .upper .next {
-  color: palevioletred;
-}
-
-.bottom .next {
-  color: palegoldenrod;
-}
-
-.upper .current {
-  color: palegreen;
-}
-
-.bottom .current {
-  color: paleturquoise;
-} */
 </style>

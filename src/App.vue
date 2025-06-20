@@ -4,7 +4,7 @@ import {ref, useTemplateRef} from 'vue'
 import {makeSyllablePack} from './lib/syllable.ts'
 import flapAudio from '/src/assets/flap.mp3';
 
-const s = ref('');
+const s = ref('ABC');
 
 const audio = useTemplateRef<HTMLAudioElement>('audio');
 
@@ -22,7 +22,7 @@ const showNewSyllable = () => {
 </script>
 
 <template>
-  <div class="app-wrapper" @click="showNewSyllable">
+  <div class="app-wrapper w-[100dvw] h-[100dvh] flex items-center justify-center" @click="showNewSyllable">
     <SplitFlapLine v-if="s.length" :flap-ms="150"
                    :text="s.toUpperCase()"
                    @flap-start="onFlapStart" />
@@ -31,15 +31,4 @@ const showNewSyllable = () => {
 </template>
 
 <style scoped lang="css">
-.app-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 </style>
