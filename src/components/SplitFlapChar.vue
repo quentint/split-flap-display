@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import {onMounted, ref, watch} from 'vue'
 import {characters} from '../lib/syllable.ts'
 
 interface Props {
@@ -7,84 +7,84 @@ interface Props {
   flapMs?: number;
 }
 
-const UPPER_START = 'upperFlap__start';
-const UPPER_END = 'upperFlap__end';
-const BOTTOM_START = 'bottomFlap__start';
-const BOTTOM_END = 'bottomFlap__end';
+const UPPER_START = 'upperFlap__start'
+const UPPER_END = 'upperFlap__end'
+const BOTTOM_START = 'bottomFlap__start'
+const BOTTOM_END = 'bottomFlap__end'
 
-const props = defineProps<Props>();
-const flapMs = props.flapMs ?? 100;
-const currentChar = ref(characters[0]);
-const nextChar = ref(characters[props.char === characters[0] ? 0 : 1]);
-const upperFlapAnimState = ref(UPPER_START);
-const bottomFlapAnimState = ref(BOTTOM_START);
-const animationId = ref(0);
-const emit = defineEmits(['flapStart', 'flapEnd']);
+const props = defineProps<Props>()
+const flapMs = props.flapMs ?? 100
+const currentChar = ref(characters[0])
+const nextChar = ref(characters[props.char === characters[0] ? 0 : 1])
+const upperFlapAnimState = ref(UPPER_START)
+const bottomFlapAnimState = ref(BOTTOM_START)
+const animationId = ref(0)
+const emit = defineEmits(['flapStart', 'flapEnd'])
 
-const delay = flapMs;
+const delay = flapMs
 
 // noinspection JSUnusedGlobalSymbols
-const animDuration = `${delay / 2}ms`;
+const animDuration = `${delay / 2}ms`
 
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const animate = async () => {
-  emit('flapStart');
-  await wait(delay / 2);
-  upperFlapAnimState.value = UPPER_END;
-  await wait(delay / 2);
-  bottomFlapAnimState.value = BOTTOM_END;
-  await wait(delay / 2);
-  emit('flapEnd');
-};
+  emit('flapStart')
+  await wait(delay / 2)
+  upperFlapAnimState.value = UPPER_END
+  await wait(delay / 2)
+  bottomFlapAnimState.value = BOTTOM_END
+  await wait(delay / 2)
+  emit('flapEnd')
+}
 
 const resetAnimation = () => {
-  upperFlapAnimState.value = UPPER_START;
-  bottomFlapAnimState.value = BOTTOM_START;
-};
+  upperFlapAnimState.value = UPPER_START
+  bottomFlapAnimState.value = BOTTOM_START
+}
 
 const runAnimationSequence = async (targetIndex: number) => {
-  animationId.value++;
-  const myId = animationId.value;
+  animationId.value++
+  const myId = animationId.value
 
-  nextChar.value = characters[targetIndex === 0 ? 0 : 1];
+  nextChar.value = characters[targetIndex === 0 ? 0 : 1]
 
   for (let i = 1; i < targetIndex; i++) {
-    if (myId !== animationId.value) return;
-    await animate();
-    if (myId !== animationId.value) return;
-    currentChar.value = characters[i];
-    resetAnimation();
-    nextChar.value = characters[i + 1] ?? characters[i];
+    if (myId !== animationId.value) return
+    await animate()
+    if (myId !== animationId.value) return
+    currentChar.value = characters[i]
+    resetAnimation()
+    nextChar.value = characters[i + 1] ?? characters[i]
   }
 
   // Play the final animation before showing the target character
   if (targetIndex > 0) {
-    if (myId !== animationId.value) return;
-    await animate();
-    if (myId !== animationId.value) return;
-    currentChar.value = characters[targetIndex];
-    resetAnimation();
-    nextChar.value = characters[targetIndex];
+    if (myId !== animationId.value) return
+    await animate()
+    if (myId !== animationId.value) return
+    currentChar.value = characters[targetIndex]
+    resetAnimation()
+    nextChar.value = characters[targetIndex]
   } else {
-    currentChar.value = characters[0];
-    resetAnimation();
-    nextChar.value = characters[0];
+    currentChar.value = characters[0]
+    resetAnimation()
+    nextChar.value = characters[0]
   }
-};
+}
 
 const getTargetIndex = (char: string) => {
-  const findResult = characters.findIndex(el => el === char);
-  return findResult === -1 ? 0 : findResult;
-};
+  const findResult = characters.findIndex(el => el === char)
+  return findResult === -1 ? 0 : findResult
+}
 
 onMounted(() => {
-  runAnimationSequence(getTargetIndex(props.char));
-});
+  runAnimationSequence(getTargetIndex(props.char))
+})
 
 watch(() => props.char, (newChar) => {
-  runAnimationSequence(getTargetIndex(newChar));
-});
+  runAnimationSequence(getTargetIndex(newChar))
+})
 </script>
 
 <template>
