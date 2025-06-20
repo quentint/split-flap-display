@@ -2,6 +2,8 @@
 import SplitFlapLine from './components/SplitFlapLine.vue';
 import {ref, useTemplateRef} from 'vue'
 import {makeSimpleSyllable} from './lib/syllable.ts'
+import flapAudio from '/src/assets/flap.mp3';
+
 const s = ref('  ');
 
 const audio = useTemplateRef<HTMLAudioElement>('audio');
@@ -25,7 +27,7 @@ const showNewSyllable = () => {
                    :text="s.toUpperCase()"
                    @flap-start="onFlapStart" />
   </div>
-  <audio ref="audio" src="/flap.mp3"></audio>
+  <audio ref="audio" :src="flapAudio"></audio>
 </template>
 
 <style scoped lang="css">
