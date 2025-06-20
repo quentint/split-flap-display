@@ -114,6 +114,7 @@ watch(() => props.char, (newChar) => {
   --fontsize: 5rem;
   font-family: monospace;
   white-space: pre;
+  cursor: default;
 }
 
 span {

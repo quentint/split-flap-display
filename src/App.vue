@@ -23,8 +23,6 @@ const onFlapStart = () => {
     <SplitFlapLine :flap-ms="150"
                    :text="s.toUpperCase()"
                    @flap-start="onFlapStart" />
-    <button @click="reverse">Reverse</button>
-    <span>{{ s }}</span>
   </div>
   <audio ref="audio" src="/flap.mp3"></audio>
 </template>
@@ -34,9 +32,10 @@ const onFlapStart = () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 1.5rem;
+  width: 100%;
   height: 100%;
-  width: fit-content;
   margin: 0;
   padding: 0;
 }
