@@ -148,11 +148,13 @@ span {
   position: absolute;
 }
 
+/*noinspection CssUnusedSymbol*/
 .upperFlap__start {
   transform: perspective(5cm) rotateX(0turn);
   filter: brightness(1);
 }
 
+/*noinspection CssUnusedSymbol*/
 .upperFlap__end {
   transform: perspective(5cm) rotateX(-0.25turn);
   filter: brightness(0);
@@ -160,11 +162,13 @@ span {
   transition-timing-function: ease-in;
 }
 
+/*noinspection CssUnusedSymbol*/
 .bottomFlap__start {
   transform: perspective(5cm) rotateX(0.25turn);
   filter: brightness(3);
 }
 
+/*noinspection CssUnusedSymbol*/
 .bottomFlap__end {
   transform: perspective(5cm) rotateX(0turn);
   filter: brightness(1);
