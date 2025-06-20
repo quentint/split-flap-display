@@ -10,8 +10,10 @@ const reverse = () => {
 
 <template>
   <div class="app-wrapper">
-    <SplitFlapLine :text="s.toUpperCase()" :flap-ms="250" />
-    <SplitFlapLine text="SALUT" :flap-ms="250" />
+    <SplitFlapLine :flap-ms="1000"
+                   :text="s.toUpperCase()"
+                   @flap-start="() => console.log('start')"
+                   @flap-end="() => console.log('end')"/>
     <button @click="reverse">Reverse</button>
     <span>{{ s }}</span>
   </div>
