@@ -45,7 +45,7 @@ function onFlapEvent(eventName: 'flapStart' | 'flapEnd') {
         v-for="(char, idx) in chars"
         :key="idx"
         :char="char"
-        :flapMs="flapMs"
+        :flap-ms="flapMs"
         @flap-start="() => onFlapEvent('flapStart')"
         @flap-end="() => onFlapEvent('flapEnd')"
     />

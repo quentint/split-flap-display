@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {characters} from '../lib/syllable.ts'
 
 interface Props {
@@ -13,28 +13,26 @@ const BOTTOM_START = 'bottomFlap__start'
 const BOTTOM_END = 'bottomFlap__end'
 
 const props = defineProps<Props>()
-const flapMs = props.flapMs ?? 100
 const currentChar = ref(characters[0])
 const nextChar = ref(characters[props.char === characters[0] ? 0 : 1])
 const upperFlapAnimState = ref(UPPER_START)
 const bottomFlapAnimState = ref(BOTTOM_START)
 const animationId = ref(0)
 const emit = defineEmits(['flapStart', 'flapEnd'])
-
-const delay = flapMs
+const delay = computed(() => props.flapMs ?? 100)
 
 // noinspection JSUnusedGlobalSymbols
-const animDuration = `${delay / 2}ms`
+const animDuration = computed(() => `${delay.value / 2}ms`)
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const animate = async () => {
   emit('flapStart')
-  await wait(delay / 2)
+  await wait(delay.value / 2)
   upperFlapAnimState.value = UPPER_END
-  await wait(delay / 2)
+  await wait(delay.value / 2)
   bottomFlapAnimState.value = BOTTOM_END
-  await wait(delay / 2)
+  await wait(delay.value / 2)
   emit('flapEnd')
 }
 

@@ -14,6 +14,15 @@ const settingsVisible = ref(false)
 const hardSyllables = ref(false)
 const numSyllables = ref(1)
 
+const speed = ref<'slow' | 'normal' | 'fast'>('normal')
+type Speed = typeof speed.value
+
+const speedNameToMs: Record<Speed, number> = {
+  slow: 500,
+  normal: 250,
+  fast: 100,
+}
+
 const onFlapStart = () => {
   if (!flapAudioElement.value) {
     return
@@ -47,7 +56,7 @@ const onSuccess = async () => {
   </div>
   <div class="absolute inset-0 flex items-center justify-center">
     <SplitFlapLine :style="{opacity: s.trim().length ? 1 : 0}"
-                   :flap-ms="150"
+                   :flap-ms="speedNameToMs[speed]"
                    :text="s.toUpperCase()"
                    @click="showNewSyllable"
                    @flap-start="onFlapStart"/>
@@ -57,6 +66,11 @@ const onSuccess = async () => {
   <div v-if="settingsVisible" class="absolute left-0 right-0 top-0 flex flex-wrap gap-4 p-4 justify-center items-center">
     <label><input type="checkbox" v-model="hardSyllables"> Syllabes difficiles</label>
     <label>Nombre de syllables <input type="number" v-model="numSyllables" class="w-12 border"></label>
+    <div class="text-xl">
+      <label><input v-model="speed" type="radio" name="speed" value="slow">🐢</label>
+      <label><input v-model="speed" type="radio" name="speed" value="normal">👣</label>
+      <label><input v-model="speed" type="radio" name="speed" value="fast">🐇</label>
+    </div>
   </div>
 </template>
 
