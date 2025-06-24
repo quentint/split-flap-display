@@ -79,10 +79,11 @@ const confettiColors = computed(() => {
     <button class="absolute bottom-0 left-0 size-[10dvw]" @click="settingsVisible = !settingsVisible"></button>
     <button class="absolute bottom-0 right-0 size-[10dvw]" @click="onSuccess"></button>
   </div>
-  <div v-if="settingsVisible" class="absolute left-0 right-0 top-0 flex flex-wrap gap-4 p-4 justify-center items-center">
+
+  <div v-if="settingsVisible" class="absolute left-0 right-0 top-0 flex flex-wrap gap-6 p-4 justify-center items-center">
     <label><input type="checkbox" v-model="hardSyllables"> Syllabes difficiles</label>
     <label>Nombre de syllables <input type="number" v-model="numSyllables" class="w-12 border"></label>
-    <div class="text-xl">
+    <div class="text-xl flex gap-2">
       <label><input v-model="speed" type="radio" name="speed" value="slow">🐢</label>
       <label><input v-model="speed" type="radio" name="speed" value="normal">👣</label>
       <label><input v-model="speed" type="radio" name="speed" value="fast">🐇</label>
