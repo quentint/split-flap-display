@@ -68,7 +68,7 @@ const confettiColors = computed(() => {
   </div>
 
   <div class="absolute inset-0 flex items-center justify-center">
-    <div class="flex gap-2">
+    <div class="flex gap-2 flex-wrap justify-center p-4">
       <SplitFlapLine v-for="syllable in pack"
                      :flap-ms="speedNameToMs[speed]"
                      :outline-color="syllable.color"
