@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import SplitFlapLine from './components/SplitFlapLine.vue'
-import {nextTick, ref, useTemplateRef} from 'vue'
+import {computed, nextTick, ref, useTemplateRef} from 'vue'
 import {makeSyllablePack, SyllablePack} from './lib/syllable.ts'
 import flapAudio from '/src/assets/flap.mp3'
 import popAudio from '/src/assets/pop.mp3'
 import ConfettiExplosion from 'vue-confetti-explosion'
+import {getColorHex} from './lib/colors.ts'
 
 const pack = ref<SyllablePack>([{text: '  ', color: 'none'}])
 const flapAudioElement = useTemplateRef<HTMLAudioElement>('flap')
@@ -46,14 +47,25 @@ const onSuccess = async () => {
   await nextTick()
   confetti.value = true
 }
+
+const confettiColors = computed(() => {
+  return pack.value.map(syllable => syllable.color ? getColorHex(syllable.color) : 'transparent')
+})
 </script>
 
 <template>
   <audio ref="flap" :src="flapAudio"></audio>
   <audio ref="pop" :src="popAudio"></audio>
+
   <div class="absolute inset-0 overflow-clip">
-    <ConfettiExplosion v-if="confetti" class="absolute left-1/2 top-1/2"/>
+    <div class="absolute top-1/2" :class="[numSyllables > 1 ? 'left-0' : 'left-1/2']">
+      <ConfettiExplosion v-if="confetti" :colors="confettiColors"/>
+    </div>
+    <div class="absolute right-0 top-1/2" v-show="numSyllables > 1">
+      <ConfettiExplosion v-if="confetti" :colors="confettiColors"/>
+    </div>
   </div>
+
   <div class="absolute inset-0 flex items-center justify-center">
     <div class="flex gap-2">
       <SplitFlapLine v-for="syllable in pack"

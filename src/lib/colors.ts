@@ -20,3 +20,13 @@ export const outlineColorMap = {
 } as const
 
 export type OutlineColor = keyof typeof outlineColorMap
+
+export const getColorHex = (color: OutlineColor): string => {
+  const $e = document.createElement('div');
+  $e.className = outlineColorMap[color];
+  document.body.appendChild($e);
+  const colorHex = window.getComputedStyle($e).outlineColor;
+  document.body.removeChild($e);
+
+  return colorHex;
+}
