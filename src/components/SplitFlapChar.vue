@@ -2,9 +2,33 @@
 import {computed, onMounted, ref, watch} from 'vue'
 import {characters} from '../lib/syllable.ts'
 
+const outlineColorMap = {
+  'red': 'outline-red-500',
+  'orange': 'outline-orange-500',
+  'amber': 'outline-amber-500',
+  'yellow': 'outline-yellow-500',
+  'lime': 'outline-lime-500',
+  'green': 'outline-green-500',
+  'emerald': 'outline-emerald-500',
+  'teal': 'outline-teal-500',
+  'cyan': 'outline-cyan-500',
+  'sky': 'outline-sky-500',
+  'blue': 'outline-blue-500',
+  'indigo': 'outline-indigo-500',
+  'violet': 'outline-violet-500',
+  'purple': 'outline-purple-500',
+  'fuchsia': 'outline-fuchsia-500',
+  'pink': 'outline-pink-500',
+  'rose': 'outline-rose-500',
+  'none': 'outline-transparent',
+}
+
+export type OutlineColor = keyof typeof outlineColorMap
+
 interface Props {
   char: string;
   flapMs?: number;
+  outlineColor?: OutlineColor;
 }
 
 const UPPER_START = 'upperFlap__start'
@@ -20,6 +44,10 @@ const bottomFlapAnimState = ref(BOTTOM_START)
 const animationId = ref(0)
 const emit = defineEmits(['flapStart', 'flapEnd'])
 const delay = computed(() => props.flapMs ?? 100)
+const colorClass = computed(() => {
+  // return ''
+  return props.outlineColor ? outlineColorMap[props.outlineColor] : outlineColorMap['none']
+})
 
 // noinspection JSUnusedGlobalSymbols
 const animDuration = computed(() => `${delay.value / 2}ms`)
@@ -111,18 +139,18 @@ watch(() => props.char, (newChar) => {
 <template>
   <div class="wrapper text-8xl font-mono whitespace-pre cursor-default">
     <div class="upper">
-      <span class="next bg-stone-800 px-6 py-4">
+      <span class="next bg-stone-800 outline outline-2 -outline-offset-2 px-6 py-4" :class="colorClass">
         {{ nextChar }}
       </span>
-      <span class="current bg-stone-800 px-6 py-4" :class="upperFlapAnimState">
+      <span class="current bg-stone-800 outline outline-2 -outline-offset-2 px-6 py-4" :class="[upperFlapAnimState, colorClass]">
         {{ currentChar }}
       </span>
     </div>
     <div class="bottom">
-      <span class="next bg-stone-800 px-6 py-4" :class="bottomFlapAnimState">
+      <span class="next bg-stone-800 outline outline-2 -outline-offset-2 px-6 py-4" :class="[bottomFlapAnimState, colorClass]">
         {{ nextChar }}
       </span>
-      <span class="current bg-stone-800 px-6 py-4">
+      <span class="current bg-stone-800 outline outline-2 -outline-offset-2 px-6 py-4" :class="colorClass">
         {{ currentChar }}
       </span>
     </div>
