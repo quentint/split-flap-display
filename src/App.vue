@@ -10,7 +10,7 @@ import {useFullscreen} from '@vueuse/core'
 
 const pack = ref<SyllablePack>([{text: '  ', color: 'none'}])
 const flapAudioElement = useTemplateRef<HTMLAudioElement>('flap')
-const popAudioElement = useTemplateRef<HTMLAudioElement>('pop')
+const popAudioElements = useTemplateRef<HTMLAudioElement[]>('pop')
 const settingsVisible = ref(false)
 const hardSyllables = ref(false)
 const numSyllables = ref(1)
@@ -38,17 +38,24 @@ const showNewSyllable = () => {
   pack.value = makeSyllablePack(numSyllables.value, hardSyllables.value)
 }
 
-
 const onSuccess = () => {
-  if (popAudioElement.value) {
-    popAudioElement.value.currentTime = 0
-    popAudioElement.value.play()
+  const popDelay = 350
+
+  if (popAudioElements.value) {
+    popAudioElements.value.forEach((audio, index) => {
+      setTimeout(() => {
+        audio.currentTime = 0
+        audio.play()
+      }, popDelay * index)
+    })
   }
 
   if (confettiComponents.value) {
-    for (const confetti of confettiComponents.value) {
-      confetti.pop()
-    }
+    confettiComponents.value.forEach((confetti, index) => {
+      setTimeout(() => {
+        confetti.pop()
+      }, popDelay * index)
+    })
   }
 }
 
@@ -59,11 +66,11 @@ const confettiColors = computed(() => {
 
 <template>
   <audio ref="flap" :src="flapAudio"></audio>
-  <audio ref="pop" :src="popAudio"></audio>
 
   <div class="absolute inset-0 overflow-clip">
     <div v-for="i in numSyllables" class="absolute top-1/2" :style="{ left: `${i * 100 / (numSyllables + 1)}%` }">
       <WrappedConfetti ref="confetti" :colors="confettiColors"/>
+      <audio ref="pop" :src="popAudio"></audio>
     </div>
   </div>
 
