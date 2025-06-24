@@ -6,6 +6,7 @@ import flapAudio from '/src/assets/flap.mp3'
 import popAudio from '/src/assets/pop.mp3'
 import {getColorHex} from './lib/colors.ts'
 import WrappedConfetti from './components/WrappedConfetti.vue'
+import {useFullscreen} from '@vueuse/core'
 
 const pack = ref<SyllablePack>([{text: '  ', color: 'none'}])
 const flapAudioElement = useTemplateRef<HTMLAudioElement>('flap')
@@ -14,6 +15,7 @@ const settingsVisible = ref(false)
 const hardSyllables = ref(false)
 const numSyllables = ref(1)
 const confettiComponents = useTemplateRef<typeof WrappedConfetti[]>('confetti')
+const { toggle: toggleFullscreen } = useFullscreen()
 
 const speed = ref<'slow' | 'normal' | 'fast'>('normal')
 type Speed = typeof speed.value
@@ -88,6 +90,7 @@ const confettiColors = computed(() => {
       <label><input v-model="speed" type="radio" name="speed" value="normal">👣</label>
       <label><input v-model="speed" type="radio" name="speed" value="fast">🐇</label>
     </div>
+    <button @click="toggleFullscreen">↕️</button>
   </div>
 </template>
 
