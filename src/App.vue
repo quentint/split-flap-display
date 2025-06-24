@@ -68,7 +68,7 @@ const confettiColors = computed(() => {
   <audio ref="flap" :src="flapAudio"></audio>
 
   <div class="absolute inset-0 overflow-clip">
-    <div v-for="i in numSyllables" class="absolute top-1/2" :style="{ left: `${i * 100 / (numSyllables + 1)}%` }">
+    <div v-for="i in numSyllables" class="absolute" :style="{ bottom: `${i * 100 / (numSyllables + 1)}%`, left: `${i * 100 / (numSyllables + 1)}%` }">
       <WrappedConfetti ref="confetti" :colors="confettiColors"/>
       <audio ref="pop" :src="popAudio"></audio>
     </div>
