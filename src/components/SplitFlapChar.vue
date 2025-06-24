@@ -48,13 +48,13 @@ const resetAnimation = () => {
 
 const performStep = async (
   myId: number,
-  charIndex: number,
-  nextIndex: number
+  charIndex: number
 ) => {
   if (myId !== animationId.value) {
     return false
   }
 
+  nextChar.value = characters[charIndex]
   await animate()
 
   if (myId !== animationId.value) {
@@ -63,7 +63,6 @@ const performStep = async (
 
   currentChar.value = characters[charIndex]
   resetAnimation()
-  nextChar.value = characters[nextIndex] ?? characters[charIndex]
 
   return true
 }
@@ -86,17 +85,11 @@ const runAnimationSequence = async (targetIndex: number) => {
   let steps = (targetIndex - fromIndex + characters.length) % characters.length
   for (let i = 1; i <= steps; i++) {
     const charIdx = (fromIndex + i) % characters.length
-    const nextIdx = (fromIndex + i + 1) % characters.length
-    const continued = await performStep(myId, charIdx, nextIdx)
+    const continued = await performStep(myId, charIdx)
     if (!continued) {
       return
     }
   }
-
-  // Play the final animation before showing the target character
-  currentChar.value = characters[targetIndex]
-  resetAnimation()
-  nextChar.value = characters[targetIndex]
 }
 
 const getTargetIndex = (char: string) => {
