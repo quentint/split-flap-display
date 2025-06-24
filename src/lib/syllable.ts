@@ -40,7 +40,7 @@ export const makeSyllable = (hard: boolean = false): Syllable => {
 }
 
 const applyRandomColors = (pack: SyllablePack): void => {
-  const colors: OutlineColor[] = Object.keys(outlineColorMap) as OutlineColor[]
+  const colors: OutlineColor[] = Object.keys(outlineColorMap).filter(c => c !== 'none') as OutlineColor[]
   const randomColorIndex = Math.floor(Math.random() * colors.length)
   const numSyllables = pack.length
   const colorGap = Math.floor(colors.length / numSyllables)

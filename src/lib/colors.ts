@@ -1,4 +1,6 @@
 export const outlineColorMap = {
+  'none': 'outline-transparent',
+
   'red': 'outline-red-500',
   'orange': 'outline-orange-500',
   'amber': 'outline-amber-500',
@@ -16,7 +18,6 @@ export const outlineColorMap = {
   'fuchsia': 'outline-fuchsia-500',
   'pink': 'outline-pink-500',
   'rose': 'outline-rose-500',
-  'none': 'outline-transparent',
 } as const
 
 export type OutlineColor = keyof typeof outlineColorMap
