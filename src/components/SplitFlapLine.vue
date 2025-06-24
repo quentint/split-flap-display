@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import SplitFlapCharChar from './SplitFlapChar.vue'
+import {OutlineColor} from '../lib/colors.ts'
 
 interface Props {
   text: string;
   flapMs?: number;
+  outlineColor?: OutlineColor;
 }
 
 const props = defineProps<Props>()
@@ -40,12 +42,13 @@ function onFlapEvent(eventName: 'flapStart' | 'flapEnd') {
 </script>
 
 <template>
-  <div class="split-flap-line">
+  <div class="flex gap-1">
     <SplitFlapCharChar
         v-for="(char, idx) in chars"
         :key="idx"
         :char="char"
         :flap-ms="flapMs"
+        :outline-color="outlineColor"
         @flap-start="() => onFlapEvent('flapStart')"
         @flap-end="() => onFlapEvent('flapEnd')"
     />
@@ -53,10 +56,5 @@ function onFlapEvent(eventName: 'flapStart' | 'flapEnd') {
 </template>
 
 <style scoped>
-.split-flap-line {
-  display: flex;
-  flex-direction: row;
-  gap: .35em;
-}
 </style>
 

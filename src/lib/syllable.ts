@@ -1,8 +1,19 @@
+import {OutlineColor, outlineColorMap} from './colors.ts'
+import {getRandomElement} from './random.ts'
+
 const simpleConsonants = 'bdfjklmnprtvz'.toUpperCase().split('')
 const hardConsonants = 'cghswx'.toUpperCase().split('')
 const neverConsonants = 'q'.toUpperCase().split('')
 const consonants = simpleConsonants.concat(hardConsonants, neverConsonants)
 const vowels = 'aeiou'.toUpperCase().split('')
+
+type Syllable = {
+  text: string
+  hard?: boolean
+  color?: OutlineColor
+}
+
+export type SyllablePack = Syllable[]
 
 export const characters = consonants
 .concat(vowels, ' ', 'Y')
@@ -10,26 +21,42 @@ export const characters = consonants
   return a.localeCompare(b)
 })
 
-const getRandomElement = (arr: string[]): string => {
-  return arr[Math.floor(Math.random() * arr.length)]
+const makeHardSyllable = (): Syllable => {
+  return {
+    text: getRandomElement(hardConsonants) + getRandomElement(vowels),
+    hard: true,
+  }
 }
 
-const makeHardSyllable = (): string => {
-  return getRandomElement(hardConsonants) + getRandomElement(vowels)
+const makeSimpleSyllable = (): Syllable => {
+  return {
+    text: getRandomElement(simpleConsonants) + getRandomElement(vowels),
+    hard: false,
+  }
 }
 
-const makeSimpleSyllable = (): string => {
-  return getRandomElement(simpleConsonants) + getRandomElement(vowels)
-}
-
-export const makeSyllable = (hard: boolean = false): string => {
+export const makeSyllable = (hard: boolean = false): Syllable => {
   return hard ? makeHardSyllable() : makeSimpleSyllable()
 }
 
-export const makeSyllablePack = (count: number, hard: boolean = false): string => {
-  let syllablePack = ''
+const applyRandomColors = (pack: SyllablePack): void => {
+  const colors: OutlineColor[] = Object.keys(outlineColorMap) as OutlineColor[]
+  const randomColorIndex = Math.floor(Math.random() * colors.length)
+  const numSyllables = pack.length
+  const colorGap = Math.floor(colors.length / numSyllables)
+
+  pack.forEach((s: Syllable, index: number) => {
+    s.color = colors[(randomColorIndex + (index * colorGap)) % colors.length]
+  })
+}
+
+export const makeSyllablePack = (count: number, hard: boolean = false): SyllablePack => {
+  let syllablePack: SyllablePack = []
   for (let i = 0; i < count; i++) {
-    syllablePack += makeSyllable(hard)
+    syllablePack.push(makeSyllable(hard))
   }
+
+  applyRandomColors(syllablePack)
+
   return syllablePack
 }
