@@ -56,7 +56,7 @@ function onFlapEvent(eventName: 'flapStart' | 'flapEnd') {
 .split-flap-line {
   display: flex;
   flex-direction: row;
-  gap: 0.25em;
+  gap: .35em;
 }
 </style>
 
